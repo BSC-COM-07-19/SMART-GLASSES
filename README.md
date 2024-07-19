@@ -8,9 +8,11 @@ This repository is structured as follows:
 
 backend/: Contains the backend code for the Vision-X platform, including API endpoints, database models, and business logic implemented in Python using the Flask framework. It also handles communication between the smart glasses and the server.
 
-frontend/: Features the frontend code for the Vision-X platform, implemented using JavaScript, React, and Redux. This directory includes the HTML, CSS, and JavaScript files for the user interface and controls the interaction with the smart glasses.
+smart-glasses-frontend/: Features the frontend code for the Vision-X platform, implemented using JavaScript, React, and Redux. This directory includes the HTML, CSS, and JavaScript files for the user interface and controls the interaction with the smart glasses.
 
 models/: Includes the trained AI models used by Vision-X to process real-time image data and provide navigation assistance. Models are implemented using Python-based AI/ML libraries and support functionalities such as obstacle detection and route planning.
+
+data/: Contains the datasets for training our models.
 
 Purpose
 
