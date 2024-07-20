@@ -7,18 +7,23 @@ export default function Home() {
   const [openModal, setOpenModal] = useState(false);
   const [openContactModal, setOpenContactModal] = useState(false);
   const [hasGreeted, setHasGreeted] = useState(false);
-  const [contact, setContact] = useState('');
+  const [contactNumber, setContactNumber] = useState('');
+  const [contactName, setContactName] = useState('');
   const [contacts, setContacts] = useState([]);
+  const [isAskingForName, setIsAskingForName] = useState(false);
+  const [currentLocation, setCurrentLocation] = useState('');
+  const [destination, setDestination] = useState('');
 
   // Function to handle speech synthesis
-  const speakText = (text) => {
+  const speakText = (text, callback) => {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-US'; // Set language if needed
+    utterance.onend = callback;
     speechSynthesis.speak(utterance);
   };
 
   // Function to handle speech recognition
-  const startRecognition = () => {
+  const startRecognition = (callback) => {
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     recognition.lang = 'en-US'; // Set language if needed
     recognition.interimResults = false;
@@ -26,7 +31,7 @@ export default function Home() {
 
     recognition.onresult = (event) => {
       const transcript = event.results[0][0].transcript;
-      setContact(transcript);
+      callback(transcript);
     };
 
     recognition.onerror = (event) => {
@@ -39,25 +44,44 @@ export default function Home() {
   // Greet user on component mount
   useEffect(() => {
     if (!hasGreeted) {
-      speakText('Welcome Back! How can I assist you today?');
-      setHasGreeted(true);
+      speakText('Welcome Back! How can I assist you today?', () => {
+        setHasGreeted(true);
+        startRecognition((transcript) => {
+          setCurrentLocation(transcript);
+          speakText('Where would you like to go?', () => {
+            startRecognition((transcript) => {
+              setDestination(transcript);
+            });
+          });
+        });
+      });
     }
   }, [hasGreeted]);
 
-  // Read text when modal is opened
-  useEffect(() => {
-    if (openModal) {
-      speakText("Navigation guidance initiated. Where would you like to go?");
-    }
-  }, [openModal]);
-
   // Save contact when modal is closed
   useEffect(() => {
-    if (!openContactModal && contact) {
-      setContacts([...contacts, contact]);
-      setContact('');
+    if (!openContactModal && contactNumber && contactName) {
+      setContacts([...contacts, { name: contactName, number: contactNumber }]);
+      setContactNumber('');
+      setContactName('');
+      setIsAskingForName(false);
     }
-  }, [openContactModal, contact, contacts]);
+  }, [openContactModal, contactNumber, contactName, contacts]);
+
+  // Function to handle adding a new contact
+  const handleAddContact = () => {
+    speakText('Please say the contact number', () => {
+      startRecognition((number) => {
+        setContactNumber(number);
+        speakText('Please say the name of the contact', () => {
+          startRecognition((name) => {
+            setContactName(name);
+            setOpenContactModal(false);
+          });
+        });
+      });
+    });
+  };
 
   return (
     <div
@@ -85,7 +109,7 @@ export default function Home() {
           <Button gradientDuoTone="purpleToPink" onClick={() => speakText("My current Location")}>
             My Current Location
           </Button>
-          <Button gradientDuoTone="purpleToPink" onClick={() => { setOpenContactModal(true); startRecognition(); }}>
+          <Button gradientDuoTone="purpleToPink" onClick={() => { setOpenContactModal(true); handleAddContact(); }}>
             Add Emergency Contact
           </Button>
         </div>
@@ -95,7 +119,7 @@ export default function Home() {
           <h3 className='text-lg text-white'>Emergency Contacts:</h3>
           <ul className='list-disc pl-5 text-white'>
             {contacts.map((contact, index) => (
-              <li key={index}>{contact}</li>
+              <li key={index}>{contact.name}: {contact.number}</li>
             ))}
           </ul>
         </div>
@@ -107,7 +131,7 @@ export default function Home() {
             <div className="space-y-6">
               <MdKeyboardVoice className='text-center text-pink-700 mx-auto text-3xl' />
               <Label>Where would you like to go to?</Label>
-              <TextInput className='mt-4' placeholder='e.g., To the dining room' />
+              <TextInput className='mt-4' placeholder='e.g., To the dining room' value={destination} readOnly />
             </div>
           </Modal.Body>
           <Modal.Footer>
@@ -129,8 +153,14 @@ export default function Home() {
               <Label>Speak the name and number of your emergency contact</Label>
               <TextInput
                 className='mt-4'
-                placeholder='e.g., John Doe 123-456-7890'
-                value={contact}
+                placeholder='e.g., 123-456-7890'
+                value={contactNumber}
+                readOnly
+              />
+              <TextInput
+                className='mt-4'
+                placeholder='e.g., John Doe'
+                value={contactName}
                 readOnly
               />
             </div>
