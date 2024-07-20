@@ -5,13 +5,35 @@ import { MdKeyboardVoice } from 'react-icons/md';
 
 export default function Home() {
   const [openModal, setOpenModal] = useState(false);
+  const [openContactModal, setOpenContactModal] = useState(false);
   const [hasGreeted, setHasGreeted] = useState(false);
+  const [contact, setContact] = useState('');
+  const [contacts, setContacts] = useState([]);
 
   // Function to handle speech synthesis
   const speakText = (text) => {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-US'; // Set language if needed
     speechSynthesis.speak(utterance);
+  };
+
+  // Function to handle speech recognition
+  const startRecognition = () => {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'en-US'; // Set language if needed
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setContact(transcript);
+    };
+
+    recognition.onerror = (event) => {
+      console.error('Speech recognition error', event);
+    };
+
+    recognition.start();
   };
 
   // Greet user on component mount
@@ -28,6 +50,14 @@ export default function Home() {
       speakText("Navigation guidance initiated. Where would you like to go?");
     }
   }, [openModal]);
+
+  // Save contact when modal is closed
+  useEffect(() => {
+    if (!openContactModal && contact) {
+      setContacts([...contacts, contact]);
+      setContact('');
+    }
+  }, [openContactModal, contact, contacts]);
 
   return (
     <div
@@ -55,6 +85,19 @@ export default function Home() {
           <Button gradientDuoTone="purpleToPink" onClick={() => speakText("My current Location")}>
             My Current Location
           </Button>
+          <Button gradientDuoTone="purpleToPink" onClick={() => { setOpenContactModal(true); startRecognition(); }}>
+            Add Emergency Contact
+          </Button>
+        </div>
+
+        {/* Display Emergency Contacts */}
+        <div className='mt-6 w-10/12'>
+          <h3 className='text-lg text-white'>Emergency Contacts:</h3>
+          <ul className='list-disc pl-5 text-white'>
+            {contacts.map((contact, index) => (
+              <li key={index}>{contact}</li>
+            ))}
+          </ul>
         </div>
 
         {/* Modal section */}
@@ -73,6 +116,28 @@ export default function Home() {
               speakText("Navigation guidance terminated!");
             }}>
               Stop Guide
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        {/* Emergency Contact Modal */}
+        <Modal show={openContactModal} onClose={() => setOpenContactModal(false)}>
+          <Modal.Header>Add Emergency Contact</Modal.Header>
+          <Modal.Body>
+            <div className="space-y-6">
+              <MdKeyboardVoice className='text-center text-pink-700 mx-auto text-3xl' />
+              <Label>Speak the name and number of your emergency contact</Label>
+              <TextInput
+                className='mt-4'
+                placeholder='e.g., John Doe 123-456-7890'
+                value={contact}
+                readOnly
+              />
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() => setOpenContactModal(false)}>
+              Save Contact
             </Button>
           </Modal.Footer>
         </Modal>
