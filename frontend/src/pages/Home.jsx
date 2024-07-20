@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Label, Modal, TextInput } from 'flowbite-react';
-import backgroundImage from '../assets/background.jpg'; // Adjust path if necessary
+import backgroundImage from '../assets/background.jpg'; // Use the uploaded image
 import { MdKeyboardVoice } from 'react-icons/md';
 
 export default function Home() {
@@ -31,20 +31,20 @@ export default function Home() {
 
   return (
     <div
-      className='bg-cover bg-center h-screen flex flex-col'
-      style={{ backgroundImage: `url(${backgroundImage})` }}
+      className='bg-cover bg-center bg-no-repeat h-screen flex flex-col'
+      style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover' }}
     >
       {/* Navbar */}
-      <div className='bg-gradient-to-r from-purple-500 to-pink-500 p-3 shadow-md'>
-        <h2 className='font-semibold text-3xl text-white'>
+      <div className='bg-gradient-to-r from-purple-500 to-pink-500 py-2 px-3 shadow-md'>
+        <h2 className='font-semibold text-2xl text-white'>
           <span className='text-yellow-200'>Vision</span>-X
         </h2>
       </div>
 
       {/* Main Content */}
-      <div className='flex flex-col justify-center items-center flex-grow'>
-        <h2 className='text-center text-lg text-white'>Welcome Back!</h2>
-        <h3 className='text-center pt-6 text-lg text-white'>How can I assist you today?</h3>
+      <div className='flex flex-col justify-center items-center flex-grow mt-10'>
+        <h2 className='text-center text-lg text-white bg-black bg-opacity-50 p-2 rounded'>Welcome Back!</h2>
+        <h3 className='text-center pt-6 text-lg text-white bg-black bg-opacity-50 p-2 rounded'>How can I assist you today?</h3>
         <div className='mt-6 w-10/12 flex gap-4 mx-auto justify-center'>
           <Button gradientDuoTone="purpleToPink" onClick={() => { setOpenModal(true); speakText('Start navigation'); }}>
             Start Navigation Guide
