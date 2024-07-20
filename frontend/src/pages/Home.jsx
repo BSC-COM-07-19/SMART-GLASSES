@@ -120,9 +120,16 @@ export default function Home() {
             </Button>
             </div>
             <div className='bg-gray-200 flex-1 rounded-md shadow-sm shadow-pink-700 p-3 mt-4'>
-                <Label className=''>Captured Images</Label>
-                <div className='grid grid-cols-3'>
-
+                <Label className='text-lg font-semibold'>Captured Images</Label>
+                <div className='grid grid-cols-3 gap-3 mt-2'>
+                    <img className='h-20 object-cover' src='https://myinfo.com.gh/wp-content/uploads/2023/03/Funny-Face.jpg'/>
+                    <img className='h-20 object-cover' src='https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/video/rZJIMvhmliwmde8a6/videoblocks-dark-skinned-man-fooling-around-makind-stupid-facial-expressions-touching-nose-with-finger-grey-isolated-background_bz6zj0aul_thumbnail-1080_01.png'/>
+                    <img className='h-20 object-cover' src='https://live.staticflickr.com/8278/30191531635_a53dbdee8b.jpg'/>
+                </div>
+                <div className='grid grid-cols-3 gap-3 mt-4'>
+                    <img className='h-20 object-cover' src='https://www.bellanaijaweddings.com/wp-content/uploads/2019/07/Makeup-Addiction-BellaNaija-Weddings-4.jpg'/>
+                    <img className='h-20 object-cover' src='https://th.bing.com/th/id/R.be9c4ae807dbf8bc79b8e071a444786b?rik=bGmc3BTpvH1E9g&riu=http%3a%2f%2fonline-english.biz.ua%2fimg%2fimg_folder04%2fman.png&ehk=PeDnzFlnrUGisrhmZYiCGWxQigndG4%2bEd4bDmDkH1Ic%3d&risl=&pid=ImgRaw&r=0'/>
+                    <img className='h-20 object-cover' src='https://th.bing.com/th/id/OIP.HuWOsRnK5XzRF24Cfe0oAAHaId?pid=ImgDet&w=206&h=235&c=7&dpr=1.1'/>
                 </div>
             </div>
           </div>
