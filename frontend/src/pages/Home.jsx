@@ -1,31 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from 'flowbite-react';
+import { Button, Label, Modal, TextInput } from 'flowbite-react';
 import backgroundImage from '../assets/background.jpg'; // Adjust path if necessary
+import { MdKeyboardVoice } from 'react-icons/md';
 
 export default function Home() {
-  const [obstacleDetected, setObstacleDetected] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [hasGreeted, setHasGreeted] = useState(false);
 
-  // Function to handle voice notification
-  const speak = (message) => {
-    const utterance = new SpeechSynthesisUtterance(message);
-    utterance.pitch = 1; // Adjust pitch if necessary
-    utterance.rate = 1;  // Adjust rate if necessary
-    window.speechSynthesis.speak(utterance);
+  // Function to handle speech synthesis
+  const speakText = (text) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US'; // Set language if needed
+    speechSynthesis.speak(utterance);
   };
 
-  // Simulate obstacle detection
+  // Greet user on component mount
   useEffect(() => {
-    const detectObstacle = () => {
-      setObstacleDetected(true);
-      speak("Obstacle detected! Please be cautious."); // Voice notification
-      setTimeout(() => setObstacleDetected(false), 3000); // Reset after 3 seconds
-    };
+    if (!hasGreeted) {
+      speakText('Welcome Back! How can I assist you today?');
+      setHasGreeted(true);
+    }
+  }, [hasGreeted]);
 
-    // Simulate obstacle detection every 10 seconds
-    const interval = setInterval(detectObstacle, 10000);
-
-    return () => clearInterval(interval);
-  }, []);
+  // Read text when modal is opened
+  useEffect(() => {
+    if (openModal) {
+      speakText("Navigation guidance initiated. Where would you like to go?");
+    }
+  }, [openModal]);
 
   return (
     <div
@@ -38,24 +40,42 @@ export default function Home() {
           <span className='text-yellow-200'>Vision</span>-X
         </h2>
       </div>
-      
+
       {/* Main Content */}
       <div className='flex flex-col justify-center items-center flex-grow'>
         <h2 className='text-center text-lg text-white'>Welcome Back!</h2>
         <h3 className='text-center pt-6 text-lg text-white'>How can I assist you today?</h3>
         <div className='mt-6 w-10/12 flex gap-4 mx-auto justify-center'>
-          <Button gradientDuoTone='purpleToPink'>Start Navigation Guide</Button>
-          <Button gradientDuoTone='purpleToPink'>Read Text</Button>
-          <Button gradientDuoTone='purpleToPink'>My Current Location</Button>
+          <Button gradientDuoTone="purpleToPink" onClick={() => { setOpenModal(true); speakText('Start navigation'); }}>
+            Start Navigation Guide
+          </Button>
+          <Button gradientDuoTone="purpleToPink" onClick={() => speakText("Read Text")}>
+            Read Text
+          </Button>
+          <Button gradientDuoTone="purpleToPink" onClick={() => speakText("My current Location")}>
+            My Current Location
+          </Button>
         </div>
 
-      {/* Obstacle Alert */}
-      {obstacleDetected && (
-          <div className='absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600 text-white p-4 rounded shadow-lg z-20'>
-            <h3 className='text-xl font-semibold'>Obstacle Detected!</h3>
-            <p>Please be cautious.</p>
-          </div>
-        )}
+        {/* Modal section */}
+        <Modal show={openModal} onClose={() => setOpenModal(false)}>
+          <Modal.Header>Navigation Guidance Initiated</Modal.Header>
+          <Modal.Body>
+            <div className="space-y-6">
+              <MdKeyboardVoice className='text-center text-pink-700 mx-auto text-3xl' />
+              <Label>Where would you like to go to?</Label>
+              <TextInput className='mt-4' placeholder='e.g., To the dining room' />
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() => {
+              setOpenModal(false);
+              speakText("Navigation guidance terminated!");
+            }}>
+              Stop Guide
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </div>
   );
