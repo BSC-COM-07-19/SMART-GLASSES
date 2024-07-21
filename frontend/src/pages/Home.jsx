@@ -100,26 +100,26 @@ export default function Home() {
         <div className='absolute inset-0 bg-black opacity-20'/>
         <div className=''>
             <Button 
-            color="orange"  className='fixed bg-transparent shadow-md shadow-white rounded-full mx-auto mt-[145px] ml-[700px] cursor-pointer' onClick={startNavigation}
+            color="orange"  className='fixed bg-transparent shadow-md shadow-white rounded-full mx-auto mt-[145px] ml-[746px] cursor-pointer' onClick={startNavigation}
             >
             <FaWalking className='text-2xl text-white'/>
             </Button>
 
             <Button 
             color="orange" onClick={()=>speakText("Read Text Initiated")}
-            className=' mx-auto mt-[150px] ml-[800px] cursor-pointer bg-transparent fixed shadow-md shadow-white'
+            className=' mx-auto mt-[150px] ml-[846px] cursor-pointer bg-transparent fixed shadow-md shadow-white'
             >
                 <FaBookReader className='text-xl text-white'/>
             </Button>
 
             <Button 
-            color="orange" onClick={()=>speakText("Emergency call initiated. Who do you wish to call?")} className=' mx-auto mt-[158px] ml-[900px] cursor-pointer bg-transparent fixed shadow-md shadow-white'
+            color="orange" onClick={()=>speakText("Emergency call initiated. Who do you wish to call?")} className=' mx-auto mt-[158px] ml-[946px] cursor-pointer bg-transparent fixed shadow-md shadow-white'
             >
                 <FaPhoneVolume className='text-xl text-white'/>
             </Button>
 
             <Button 
-            color="orange" size="sm" className="animate-vibrate  mx-auto mt-[180px] ml-[300px] cursor-pointer bg-transparent fixed rounded-full shadow-sm shadow-white"
+            color="orange" size="sm" className="animate-vibrate  mx-auto mt-[180px] ml-[346px] cursor-pointer bg-transparent fixed rounded-full shadow-sm shadow-white"
             >
                 <RiVolumeVibrateFill className='text-xl text-white font-bold'/>
       </Button>
