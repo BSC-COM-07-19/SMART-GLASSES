@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Label, Modal, TextInput } from 'flowbite-react';
-import backgroundImage from '../assets/background.jpg'; // Use the uploaded image
+import backgroundImage from '../assets/background.jpg'; 
 import { MdKeyboardVoice } from 'react-icons/md';
 import { LiaGlassesSolid } from "react-icons/lia";
 import { AiFillFolderOpen } from 'react-icons/ai';
@@ -49,7 +49,7 @@ export default function Home() {
   // Function to handle speech recognition
   const startRecognition = () => {
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = 'en-US'; // Set language if needed
+    recognition.lang = 'en-US'; 
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
@@ -91,7 +91,6 @@ export default function Home() {
 
   return (
     <div>
-{/* trial design div section */}
       <div className='bg-gradient-to-r from-purple-50 via-gray-50 to-pink-50 h-screen'>
         <div 
               className='relative bg-cover bg-center bg-no-repeat h-screen flex flex-col w-full'
